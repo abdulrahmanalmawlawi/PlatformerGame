@@ -15,8 +15,8 @@ A 2D platformer game built using Java and the CityEngine physics library.
 ## Controls
 
 - **Left/Right Arrow Keys**: Move player left/right
-- **Up Arrow Key**: Jump
-- **Space**: Attack (when sword power-up is collected)
+- **Space Bar**: Jump
+- **Up Arrow Key**: Attack (when sword power-up is collected)
 - **Escape**: Pause game / Access menu
 - **Enter**: Confirm selection in menus
 
