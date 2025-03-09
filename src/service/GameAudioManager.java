@@ -28,15 +28,58 @@ public class GameAudioManager {
      * Constructor method, loads all the audio files used in the game
      */
     public GameAudioManager() {
-        urlSound[0] = getClass().getResource("/music_level1_theme.wav");
-        urlSound[1] = getClass().getResource("/music_level2_theme.wav");
-        urlSound[2] = getClass().getResource("/music_level3_theme.wav");
-        urlSound[3] = getClass().getResource("/sfx_pickup_coin.wav");
-        urlSound[4] = getClass().getResource("/sfx_player_damage.wav");
-        urlSound[5] = getClass().getResource("/sfx_game_victory.wav");
-        urlSound[6] = getClass().getResource("/sfx_player_powerup.wav");
-        urlSound[7] = getClass().getResource("/sfx_player_bounce.wav");
-        urlSound[8] = getClass().getResource("/sfx_game_over.wav");
+        try {
+            // Try to load from resources first
+            urlSound[0] = getClass().getResource("/music_level1_theme.wav");
+            urlSound[1] = getClass().getResource("/music_level2_theme.wav");
+            urlSound[2] = getClass().getResource("/music_level3_theme.wav");
+            urlSound[3] = getClass().getResource("/sfx_pickup_coin.wav");
+            urlSound[4] = getClass().getResource("/sfx_player_damage.wav");
+            urlSound[5] = getClass().getResource("/sfx_game_victory.wav");
+            urlSound[6] = getClass().getResource("/sfx_player_powerup.wav");
+            urlSound[7] = getClass().getResource("/sfx_player_bounce.wav");
+            urlSound[8] = getClass().getResource("/sfx_game_over.wav");
+
+            // If any of the resources are null, try loading from the sound directory
+            for (int i = 0; i < 9; i++) {
+                if (urlSound[i] == null) {
+                    String fileName = "";
+                    switch (i) {
+                        case 0:
+                            fileName = "music_level1_theme.wav";
+                            break;
+                        case 1:
+                            fileName = "music_level2_theme.wav";
+                            break;
+                        case 2:
+                            fileName = "music_level3_theme.wav";
+                            break;
+                        case 3:
+                            fileName = "sfx_pickup_coin.wav";
+                            break;
+                        case 4:
+                            fileName = "sfx_player_damage.wav";
+                            break;
+                        case 5:
+                            fileName = "sfx_game_victory.wav";
+                            break;
+                        case 6:
+                            fileName = "sfx_player_powerup.wav";
+                            break;
+                        case 7:
+                            fileName = "sfx_player_bounce.wav";
+                            break;
+                        case 8:
+                            fileName = "sfx_game_over.wav";
+                            break;
+                    }
+                    urlSound[i] = new java.io.File("sound/" + fileName).toURI().toURL();
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error loading audio files: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -46,11 +89,17 @@ public class GameAudioManager {
      */
     public void setFile(int i) {
         try {
+            if (urlSound[i] == null) {
+                System.err.println("Error: Audio file at index " + i + " is not available");
+                return;
+            }
+
             AudioInputStream ais = AudioSystem.getAudioInputStream(urlSound[i]);
             clip = AudioSystem.getClip();
             clip.open(ais);
         } catch (Exception e) {
-            // Silent exception handling - could be improved with logging
+            System.err.println("Error setting audio file at index " + i + ": " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -58,7 +107,11 @@ public class GameAudioManager {
      * Play the current audio clip once
      */
     public void play() {
-        clip.start();
+        if (clip != null) {
+            clip.start();
+        } else {
+            System.err.println("Warning: Attempted to play null audio clip");
+        }
     }
 
     /**
@@ -71,11 +124,15 @@ public class GameAudioManager {
                 activeClip.stop();
             }
         } catch (Exception e) {
-            // Silent exception handling
+            System.err.println("Error stopping previous audio: " + e.getMessage());
         }
 
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
-        activeClip = clip;
+        if (clip != null) {
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+            activeClip = clip;
+        } else {
+            System.err.println("Warning: Attempted to loop null audio clip");
+        }
     }
 
     /**
