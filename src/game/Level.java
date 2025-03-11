@@ -16,7 +16,18 @@ import city.cs.engine.StaticBody;
 import assets.GameAssetManager;
 
 /**
- * This class is used to load each level
+ * Level class manages the creation and configuration of game levels.
+ * 
+ * This class is responsible for:
+ * - Defining level boundaries and characteristics (length, starting positions)
+ * - Loading level-specific assets and backgrounds
+ * - Creating platforms, obstacles, enemies, and collectibles
+ * - Positioning interactive game objects
+ * - Handling level-specific game mechanics
+ * 
+ * The game includes multiple predefined levels (1-3) with different themes,
+ * environments, challenges, and enemy types. Each level has its own unique
+ * visual style, layout, and obstacles.
  */
 public class Level {
 

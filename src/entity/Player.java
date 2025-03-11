@@ -230,6 +230,10 @@ public class Player extends PhysicsActor {
         GameWorld.sound.play();
     }
 
+    /**
+     * Updates the player's animation to the jumping state
+     * Changes the player's image based on whether they have the sword
+     */
     public void jump() {
         if (jump) {
             this.removeAllImages();
@@ -241,6 +245,10 @@ public class Player extends PhysicsActor {
         }
     }
 
+    /**
+     * Updates the player's animation to the standing state
+     * Changes the player's image based on whether they have the sword
+     */
     public void stand() {
         this.removeAllImages();
         if (hasSword) {
