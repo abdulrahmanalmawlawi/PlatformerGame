@@ -20,12 +20,22 @@ import assets.GameFileManager;
 
 /**
  * LevelFileParser handles loading and parsing level data from text files.
- * It reads level files, interprets the data, and creates the corresponding game
- * objects.
+ * 
+ * This class is responsible for:
+ * - Reading level definition files with platform, enemy, and item placements
+ * - Loading saved game states with player position and progress
+ * - Interpreting semicolon-delimited parameter lists
+ * - Constructing the appropriate game objects based on parsed data
+ * - Restoring the game world state during load operations
+ * 
+ * The parser supports multiple element types including platforms, coins,
+ * boxes, enemies, and special objects, each with their own set of parameters.
  */
 public class LevelFileParser {
     /**
-     * Loads a level from a specified file path
+     * Loads a level from a specified file path.
+     * Reads the file line by line, parsing each element and creating
+     * the corresponding game objects in the world.
      * 
      * @param w The game world to load the level into
      * @param f The file path of the level file to load
@@ -40,9 +50,24 @@ public class LevelFileParser {
     }
 
     /**
-     * Analyzes a list of parameters and creates the corresponding game elements
+     * Analyzes a list of parameters and creates the corresponding game elements.
+     * This method interprets different types of game elements based on the first
+     * parameter:
+     * - "platform": Static platforms with customizable appearance
+     * - "coin": Collectible items that increase score
+     * - "box": Dynamic physics objects that can be pushed
+     * - "intermittentplatform": Platforms that appear and disappear periodically
+     * - "enemy": Enemy characters with patrol behavior
+     * - "length": Level boundary setting
+     * - "startingPosition": Player spawn location
+     * - "level": Level number setting (can trigger level loading)
+     * - "score": Player score setting for saved games
+     * - "time": Game timer setting for saved games
+     * - "player": Player position and state for saved games
+     * - "camera": Camera position for saved games
      * 
-     * @param params The parameters to analyze
+     * @param params A list of parameters, with the first parameter indicating the
+     *               element type
      * @param w      The game world to add the elements to
      */
     public static void analyseElement(List<String> params, GameWorld w) {
