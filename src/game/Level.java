@@ -28,6 +28,17 @@ import assets.GameAssetManager;
  * The game includes multiple predefined levels (1-3) with different themes,
  * environments, challenges, and enemy types. Each level has its own unique
  * visual style, layout, and obstacles.
+ * 
+ * Level Design Principles:
+ * - Progressive difficulty: Each level introduces new challenges
+ * - Varied terrain: Mix of solid platforms, moving platforms, and hazards
+ * - Strategic enemy placement: Enemies are positioned to create meaningful
+ * encounters
+ * - Reward exploration: Coins and power-ups are hidden in less obvious
+ * locations
+ * - Multiple paths: Some levels offer alternative routes to completion
+ * - Visual storytelling: Environment details convey the game's setting and
+ * atmosphere
  */
 public class Level {
 
@@ -47,10 +58,11 @@ public class Level {
 	public final static int numberLv = 2;
 
 	/**
-	 * Load a level
+	 * Load a level based on the specified level number.
+	 * This method serves as a dispatcher to the specific level loading methods.
 	 * 
-	 * @param w,   a GameWorld
-	 * @param num, the number of the level we want to load
+	 * @param w   The GameWorld where the level will be loaded
+	 * @param num The number of the level to load (0-2)
 	 */
 	public static void loadLevel(GameWorld w, int num) {
 		switch (num) {
@@ -67,106 +79,131 @@ public class Level {
 	}
 
 	/**
-	 * Load level 1
+	 * Load level 1 - Forest Theme
 	 * 
-	 * @param w, the world
+	 * This level introduces basic game mechanics and simple platforming challenges.
+	 * Features:
+	 * - Simple terrain with varying platform heights
+	 * - Basic patrolling enemies to introduce combat
+	 * - Trees and grass elements to establish forest theme
+	 * - Coins positioned to encourage exploration
+	 * 
+	 * @param w The GameWorld where the level will be loaded
 	 */
 	public static void loadLevel1(GameWorld w) {
-		// Load the border
+		// Create invisible boundary at left edge of level
 		Shape borderShape = new BoxShape(1f, 60f);
 		StaticBody border_left = new StaticBody(w, borderShape);
 		border_left.setPosition(new Vec2(-21f, 0f));
 
-		// Load the enemy
+		// Load enemies in strategic positions
+		// First enemy patrols a medium platform
 		Enemy enemy = new BasicPatrolEnemy(w);
 		enemy.setPosition(new Vec2((float) (502.0 / 20.0), (float) (-81.5 / 20.0f)));
 		w.movableObjects.add(enemy);
 
+		// Second enemy guards a key path near the end
 		Enemy enemy2 = new BasicPatrolEnemy(w);
 		enemy2.setPosition(new Vec2((float) (1010.0 / 20.0), (float) (-36.5 / 20.0f)));
 		w.movableObjects.add(enemy2);
 
+		// Third enemy is a special blue variant on a high platform
 		Enemy enemy3 = new BasicPatrolEnemy(w);
 		enemy3.removeAllImages();
 		enemy3.addImage(new BodyImage("resources/enemies/enemy_basic_blue.gif", 1.4f));
 		enemy3.setPosition(new Vec2((float) (590.0 / 20.0), (float) (84.5 / 20.0f)));
 		w.movableObjects.add(enemy3);
 
-		// Load the platforms, the ground, the tree, the coins
+		// Load environmental elements and platforms
+		// Decorative tall tree at the beginning of the level
 		BoxShape treeShape = new BoxShape(0.6f, 8f);
 		StaticBody tree = new StaticBody(w, treeShape);
 		tree.setPosition(new Vec2(-19f, 0f));
 		tree.addImage(new BodyImage("resources/objects/decorative/prop_tree_tall.png", 17.6f));
 
+		// Create wooden platform with coins
 		BoxShape platform3Shape = new BoxShape((float) (67 / 40.0), (float) (192 / 40.0));
 		StaticBody platform3 = new StaticBody(w, platform3Shape);
 		platform3.setPosition(new Vec2((float) (131.5 / 20.0), (float) (-187.5 / 20.0f)));
 		platform3.addImage(
 				new BodyImage("resources/platforms/level1/platform_wood_medium.png", (float) (192.0 / 20.0)));
 
+		// Place coins across the platform
 		for (int i = -1; i < 2; i++) {
 			Coin.makeCoins(platform3.getPosition(), new Vec2((float) (67 / 40.0), (float) (192 / 40.0)), i, w);
 		}
 
+		// Create main ground segment with grass texture
 		BoxShape groundShape = new BoxShape((float) (558 / 40.0), (float) (129 / 40.0));
 		StaticBody ground = new StaticBody(w, groundShape);
 		ground.setPosition(new Vec2((float) (-114.0 / 20.0), (float) (-216.0 / 20.0f)));
 		ground.addImage(new BodyImage("resources/objects/decorative/prop_ground_grass.png", (float) (129.0 / 20.0)));
 
+		// Distribute coins across the ground for basic collection mechanics
 		for (int i = 0; i < 5; i++) {
 			Coin.makeCoins(new Vec2((float) (-114.0 / 20.0), (float) (-216.0 / 20.0f)),
 					new Vec2((float) (558 / 40.0), (float) (129 / 40.0)), i, w);
 		}
 
+		// Create triangular platform for an interesting jump challenge
 		PolygonShape PolygonShape = new PolygonShape(-3.75f / 2, -0.75f, 3.75f / 2, -0.75f, 3.75f / 2f, 0.75f);
 		StaticBody triangleShape = new StaticBody(w, PolygonShape);
 		triangleShape.setPosition(new Vec2(2.73f - 3.75f / 2, -7.65f + 0.75f));
 		triangleShape.addImage(new BodyImage("resources/platforms/level1/platform_triangle.png", 1.5f));
 
+		// Small stone platform serving as a stepping stone
 		BoxShape platform2Shape = new BoxShape((float) (44 / 40.0), (float) (29 / 40.0));
 		StaticBody platform2 = new StaticBody(w, platform2Shape);
 		platform2.setPosition(new Vec2((float) (76.0 / 20.0), (float) (-139.0 / 20.0f)));
 		platform2.addImage(
 				new BodyImage("resources/platforms/level1/platform_stone_small.png", (float) (29.0 / 20.0)));
 
+		// Create wide grass platform with coins as a major terrain feature
 		BoxShape platform6Shape = new BoxShape((float) (203 / 40.0), (float) (246 / 40.0));
 		StaticBody platform6 = new StaticBody(w, platform6Shape);
 		platform6.setPosition(new Vec2((float) (476.5 / 20.0), (float) (-159.5 / 20.0f)));
 		platform6.addImage(
 				new BodyImage("resources/platforms/level1/platform_grass_wide.png", (float) (246.0 / 20.0)));
 
+		// Add coins to this platform for rewards
 		for (int i = -1; i < 2; i++) {
 			Coin.makeCoins(platform6.getPosition(), new Vec2((float) (203 / 40.0), (float) (246 / 40.0)), i, w);
 		}
 
+		// Create medium brick platform with coins
 		BoxShape platform5Shape = new BoxShape((float) (138 / 40.0), (float) (190 / 40.0));
 		StaticBody platform5 = new StaticBody(w, platform5Shape);
 		platform5.setPosition(new Vec2((float) (308.0 / 20.0), (float) (-187.5 / 20.0f)));
 		platform5.addImage(
 				new BodyImage("resources/platforms/level1/platform_brick_medium.png", (float) (190.0 / 20.0)));
 
+		// Add coins to reward exploration
 		for (int i = -1; i < 2; i++) {
 			Coin.makeCoins(platform5.getPosition(), new Vec2((float) (138 / 40.0), (float) (190 / 40.0)), i, w);
 		}
 
+		// Small floating platform for vertical traversal
 		BoxShape platform4Shape = new BoxShape((float) (70 / 40.0), (float) (23 / 40.0));
 		StaticBody platform4 = new StaticBody(w, platform4Shape);
 		platform4.setPosition(new Vec2((float) (204.0 / 20.0), (float) (-107.0 / 20.0f)));
 		platform4.addImage(
 				new BodyImage("resources/platforms/level1/platform_floating_small.png", (float) (23.0 / 20.0)));
 
+		// Large stone platform forming a major level section
 		BoxShape platform7Shape = new BoxShape((float) (144 / 40.0), (float) (342 / 40.0));
 		StaticBody platform7 = new StaticBody(w, platform7Shape);
 		platform7.setPosition(new Vec2((float) (639.0 / 20.0), (float) (-111.5 / 20.0f)));
 		platform7.addImage(
 				new BodyImage("resources/platforms/level1/platform_stone_wide.png", (float) (342.0 / 20.0)));
 
+		// Small platform for challenging jumps
 		BoxShape platform8Shape = new BoxShape((float) (56 / 40.0), (float) (17 / 40.0));
 		StaticBody platform8 = new StaticBody(w, platform8Shape);
 		platform8.setPosition(new Vec2((float) (302.0 / 20.0), (float) (-28.0 / 20.0f)));
 		platform8.addImage(
 				new BodyImage("resources/platforms/level1/platform_floating_tiny.png", (float) (17.0 / 20.0)));
 
+		// Narrow platform with coin to reward skilled jumping
 		BoxShape platform9Shape = new BoxShape((float) (35 / 40.0), (float) (17 / 40.0));
 		StaticBody platform9 = new StaticBody(w, platform9Shape);
 		platform9.setPosition(new Vec2((float) (259.5 / 20.0), (float) (31.0 / 20.0f)));
@@ -174,24 +211,28 @@ public class Level {
 				new BodyImage("resources/platforms/level1/platform_floating_narrow.png", (float) (17.0 / 20.0)));
 		Coin.makeCoins(platform9.getPosition(), new Vec2((float) (35 / 40.0), (float) (17 / 40.0)), 0, w);
 
+		// Wooden narrow platform for higher vertical progression
 		BoxShape platform10Shape = new BoxShape((float) (106 / 40.0), (float) (15 / 40.0));
 		StaticBody platform10 = new StaticBody(w, platform10Shape);
 		platform10.setPosition(new Vec2((float) (326.0 / 20.0), (float) (117.0 / 20.0f)));
 		platform10.addImage(
 				new BodyImage("resources/platforms/level1/platform_wood_narrow.png", (float) (15.0 / 20.0)));
 
+		// Interactive movable crate for physics puzzles
 		BoxShape boxShape = new BoxShape((float) (22 / 40.0), (float) (22 / 40.0));
 		DynamicBody box = new DynamicBody(w, boxShape);
 		box.setGravityScale(11f);
 		box.setPosition(new Vec2((float) (340.0 / 20.0), (float) (135.5 / 20.0f)));
 		box.addImage(new BodyImage("resources/objects/decorative/prop_crate_small.png", (float) (22.0 / 20.0)));
 
+		// Large brick platform near end of level
 		BoxShape platform11Shape = new BoxShape((float) (144 / 40.0), (float) (234 / 40.0));
 		StaticBody platform11 = new StaticBody(w, platform11Shape);
 		platform11.setPosition(new Vec2((float) (1069.0 / 20.0), (float) (-163.5 / 20.0f)));
 		platform11.addImage(
 				new BodyImage("resources/platforms/level1/platform_brick_large.png", (float) (234.0 / 20.0)));
 
+		// Final medium grass platform marking the level exit
 		BoxShape platform13Shape = new BoxShape((float) (144 / 40.0), (float) (234 / 40.0));
 		StaticBody platform13 = new StaticBody(w, platform13Shape);
 		platform13.setPosition(new Vec2((float) (1326.0 / 20.0), (float) (-163.5 / 20.0f)));
