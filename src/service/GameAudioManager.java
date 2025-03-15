@@ -8,24 +8,45 @@ import java.net.URL;
 /**
  * Class responsible for loading, playing, and managing all game audio including
  * background music and sound effects.
+ * 
+ * This manager handles:
+ * - Loading and caching sound effects and music tracks
+ * - Playing one-time sound effects
+ * - Looping background music tracks
+ * - Pausing and resuming audio playback
+ * - Switching between different music tracks
+ * - Fallback loading from alternate locations if primary resource loading fails
  */
 public class GameAudioManager {
 
-    // Sound effect constants
+    // Sound effect constants for easy reference throughout the game
+    /** Constant for coin pickup sound effect */
     public static final int COIN = 3;
+    /** Constant for player damage sound effect */
     public static final int DAMAGE = 4;
+    /** Constant for level victory sound effect */
     public static final int WIN = 5;
+    /** Constant for sword powerup sound effect */
     public static final int SWORD = 6;
+    /** Constant for player bounce sound effect */
     public static final int BOUNCE = 7;
+    /** Constant for game over sound effect */
     public static final int GAME_OVER = 8;
 
+    /** Current audio clip being prepared for playback */
     Clip clip;
+    /** Currently active background music clip */
     Clip activeClip;
+    /** Array of URLs to audio files, indexed by their constant values */
     URL[] urlSound = new URL[30];
+    /** Stores the timestamp when audio is paused for resuming later */
     long cliptime = 0;
 
     /**
-     * Constructor method, loads all the audio files used in the game
+     * Constructor method that initializes the audio manager by loading all game
+     * audio files.
+     * Attempts to load from resources first, then falls back to the sound directory
+     * if resource loading fails for any file.
      */
     public GameAudioManager() {
         try {
@@ -83,9 +104,10 @@ public class GameAudioManager {
     }
 
     /**
-     * Set the clip to the wanted audio file
+     * Prepares an audio file for playback by loading it into the clip.
      * 
-     * @param i, the index of the audio file in the preloaded array
+     * @param i The index of the audio file in the preloaded array to set as current
+     *          clip
      */
     public void setFile(int i) {
         try {
@@ -104,7 +126,8 @@ public class GameAudioManager {
     }
 
     /**
-     * Play the current audio clip once
+     * Plays the current audio clip once from beginning to end.
+     * Typically used for sound effects that should play once on events.
      */
     public void play() {
         if (clip != null) {
@@ -115,7 +138,9 @@ public class GameAudioManager {
     }
 
     /**
-     * Loop the current audio clip continuously
+     * Loops the current audio clip continuously.
+     * Typically used for background music that should play until stopped.
+     * Stops any previously looping clip first.
      */
     public void loop() {
         try {
@@ -136,16 +161,17 @@ public class GameAudioManager {
     }
 
     /**
-     * Stop the current audio clip
+     * Stops playback of the current audio clip.
      */
     public void stop() {
         clip.stop();
     }
 
     /**
-     * Switch the background music loop to a different track
+     * Convenience method to switch background music to a different track.
+     * Sets the file, plays it, and puts it in a continuous loop.
      * 
-     * @param num The index of the audio track to switch to
+     * @param num The index of the audio track to switch to (0-2 for music tracks)
      */
     public void switchloop(int num) {
         setFile(num);
@@ -154,7 +180,8 @@ public class GameAudioManager {
     }
 
     /**
-     * Get the currently playing background music clip
+     * Returns the currently playing background music clip.
+     * Useful for checking the active music state.
      * 
      * @return The active background music Clip
      */
@@ -163,7 +190,8 @@ public class GameAudioManager {
     }
 
     /**
-     * Pause the currently playing background music
+     * Pauses the currently playing background music.
+     * Stores the current position so it can be resumed later.
      */
     public void pauseCurrentLoop() {
         cliptime = activeClip.getMicrosecondPosition();
@@ -171,7 +199,8 @@ public class GameAudioManager {
     }
 
     /**
-     * Resume playing the previously paused background music
+     * Resumes playing the previously paused background music.
+     * Continues from the position where it was paused.
      */
     public void playCurrentLoop() {
         activeClip.setMicrosecondPosition(cliptime);
