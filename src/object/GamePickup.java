@@ -13,14 +13,30 @@ import entity.Player;
  * GamePickup is an abstract class representing items that can be picked up by
  * the player.
  * It provides a common framework for handling player contact and triggering
- * specific actions
- * when the item is collected.
+ * specific actions when the item is collected.
  * 
  * Features:
  * - Uses a ghostly fixture to allow other objects to pass through it
  * - Uses a sensor to detect when the player makes contact with it
  * - Automatically triggers the appropriate action when collected
  * - Subclasses define specific behaviors for different types of pickups
+ * 
+ * The pickup system is designed to be extensible, with different types of
+ * pickups
+ * implemented as subclasses, including:
+ * - Coins for score
+ * - Keys for opening doors
+ * - Power-ups for player abilities
+ * - Health items for restoration
+ * - Special items for quest objectives
+ * 
+ * The sensor-based detection system ensures that pickups are automatically
+ * collected when the player touches them, creating a responsive and intuitive
+ * gameplay experience without requiring explicit interaction commands.
+ * 
+ * Using the ghostly fixture approach allows pickups to be placed in locations
+ * where they won't impede player movement or create physics conflicts with
+ * other game objects.
  */
 public abstract class GamePickup extends StaticBody implements SensorListener {
 
@@ -43,6 +59,11 @@ public abstract class GamePickup extends StaticBody implements SensorListener {
      * Handles the beginning of contact between the pickup and another body.
      * If the contact is with a player, triggers the pickup's action.
      * 
+     * This method is automatically called by the physics engine when any
+     * object enters the pickup's sensor area. It filters the contacts to
+     * only respond to the player, ignoring other entities like enemies
+     * or projectiles.
+     * 
      * @param sensorEvent The sensor event containing contact information
      */
     @Override
@@ -56,6 +77,10 @@ public abstract class GamePickup extends StaticBody implements SensorListener {
      * Handles the end of contact between the pickup and another body.
      * Default implementation does nothing.
      * 
+     * Subclasses can override this method if they need to implement
+     * special behavior when the player leaves the pickup's sensor area
+     * without collecting it.
+     * 
      * @param sensorEvent The sensor event containing contact information
      */
     @Override
@@ -66,6 +91,14 @@ public abstract class GamePickup extends StaticBody implements SensorListener {
     /**
      * Defines the action to perform when the player collects this item.
      * Must be implemented by subclasses to provide specific behavior.
+     * 
+     * This method is the core of the pickup system, defining what happens
+     * when a player collects the item. Common actions include:
+     * - Incrementing player statistics (score, health, etc.)
+     * - Granting temporary or permanent abilities
+     * - Changing player state (e.g., setting flags like hasKey)
+     * - Playing sound effects for feedback
+     * - Removing the pickup from the game world
      * 
      * @param player The player that collected the item
      */

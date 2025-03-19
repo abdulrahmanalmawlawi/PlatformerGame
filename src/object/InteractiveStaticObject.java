@@ -9,8 +9,25 @@ import city.cs.engine.World;
  * step.
  * This abstract class serves as a base for all static objects in the game world
  * that need to update their state or perform actions during gameplay, despite
- * being
- * physically static (non-moving) in the physics engine.
+ * being physically static (non-moving) in the physics engine.
+ * 
+ * Interactive static objects include:
+ * - Doors that can be opened with keys
+ * - Platforms that appear/disappear
+ * - Switches or levers that activate game mechanics
+ * - Checkpoints that save player progress
+ * - Special terrain elements that change behavior
+ * 
+ * All interactive static objects share these common characteristics:
+ * - They remain in fixed positions in the game world
+ * - They can change state or appearance
+ * - They respond to player interaction
+ * - They update their state on each game step
+ * 
+ * This class provides a foundation for implementing diverse interactive
+ * elements
+ * that create engaging gameplay experiences while maintaining the performance
+ * benefits of static physics bodies.
  */
 public abstract class InteractiveStaticObject extends StaticBody {
 
@@ -26,7 +43,13 @@ public abstract class InteractiveStaticObject extends StaticBody {
 
     /**
      * An event that happens on each game step (frame)
-     * Must be implemented by subclasses to define object-specific behavior
+     * Must be implemented by subclasses to define object-specific behavior.
+     * 
+     * This method is called by the game loop to allow the object to:
+     * - Update its visual state
+     * - Check for conditions that trigger state changes
+     * - Perform time-based actions
+     * - Interact with the game world
      */
     public abstract void eventStep();
 }

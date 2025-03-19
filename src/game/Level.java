@@ -288,9 +288,24 @@ public class Level {
 	}
 
 	/**
-	 * Load level 2
+	 * Load level 2 - Ice Theme
 	 * 
-	 * @param w
+	 * This level introduces more advanced platforming challenges and new enemy
+	 * types.
+	 * Features:
+	 * - Ice-themed environment with slippery platforms
+	 * - Introduction of new enemy types: Slime and SpikedEnemy
+	 * - DelayedFallingPlatform obstacles that collapse after the player stands on
+	 * them
+	 * - Platforming sequences requiring precise timing
+	 * - Introduction of the sword power-up as a key game mechanic
+	 * - More vertical level design compared to level 1
+	 * 
+	 * The level is designed to test the player's mastery of movement mechanics
+	 * and introduce combat with the sword power-up, which changes how the player
+	 * interacts with enemies and the environment.
+	 * 
+	 * @param w The GameWorld where the level will be loaded
 	 */
 	public static void loadLevel2(GameWorld w) {
 		// Border of the screen
@@ -469,9 +484,21 @@ public class Level {
 	}
 
 	/**
-	 * Load level 3
+	 * Load level 3 - Lava Theme
 	 * 
-	 * @param w
+	 * This is the most challenging level featuring complex platforming and advanced
+	 * enemy types. This level showcases:
+	 * - Hazardous lava-themed environments with vertical challenge
+	 * - Multiple key-door puzzles requiring backtracking
+	 * - Elite enemy types including Pursuer and Armored enemies
+	 * - Special platforms like IntermittentPlatform that appear and disappear
+	 * - Electric Portal obstacles that damage the player
+	 * - Enhanced player abilities with upgraded sword power
+	 * 
+	 * The level design creates a progression crescendo with multiple
+	 * checkpoint-like areas of safety between intense challenge sections.
+	 * 
+	 * @param w The GameWorld where the level will be loaded
 	 */
 	public static void loadLevel3(GameWorld w) {
 		// Border of the level
